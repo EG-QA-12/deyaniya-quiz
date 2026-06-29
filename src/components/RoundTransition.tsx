@@ -1,0 +1,69 @@
+import { useGameStore } from '../store/gameStore';
+
+export function RoundTransition() {
+  const {
+    teams, currentRound, eliminatedIds, toggleElimination,
+    confirmElimination, setScreen,
+  } = useGameStore();
+
+  const activeTeams = teams
+    .filter((t) => t.isActive && t.eliminatedInRound === null)
+    .sort((a, b) => b.score - a.score);
+
+  return (
+    <div className="min-h-screen bg-night-sky p-8">
+      <div className="stars" />
+      <div className="max-w-2xl mx-auto relative z-10">
+        <h1 className="text-3xl font-title text-gold mb-2 text-center">
+          Раунд {currentRound} завершён!
+        </h1>
+        <p className="text-pergament/70 text-center mb-6">
+          Отметьте команды, которые выбывают (по умолчанию — 3 худших)
+        </p>
+
+        <div className="space-y-2 mb-8">
+          {activeTeams.map((team, index) => {
+            const isEliminated = eliminatedIds.includes(team.id);
+            return (
+              <div
+                key={team.id}
+                onClick={() => toggleElimination(team.id)}
+                className={`
+                  flex items-center gap-4 p-4 rounded-lg border cursor-pointer transition-all
+                  ${isEliminated
+                    ? 'bg-red/10 border-red/40 text-pergament/50'
+                    : 'bg-night/60 border-gold/20 text-pergament hover:border-gold'
+                  }
+                `}
+              >
+                <span className="font-bold text-xl w-8 text-center text-gold">{index + 1}</span>
+                <span className="flex-1 text-lg">{team.name}</span>
+                <span className={`font-bold text-lg ${team.score >= 0 ? 'text-green' : 'text-red'}`}>
+                  {team.score > 0 ? '+' : ''}{team.score}
+                </span>
+                {isEliminated && <span className="text-red font-bold">ВЫБЫВАЕТ</span>}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex gap-4 justify-center">
+          <button
+            onClick={() => setScreen('game-board')}
+            className="px-6 py-3 border border-gold/30 text-pergament rounded-lg hover:bg-gold/10 transition-colors"
+          >
+            Вернуться
+          </button>
+          <button
+            onClick={confirmElimination}
+            className="px-8 py-3 bg-gold text-night font-bold rounded-lg hover:bg-gold-light transition-colors"
+          >
+            {currentRound === 2
+              ? 'Начать финальный раунд!'
+              : 'Начать следующий раунд!'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
