@@ -65,11 +65,11 @@ export function GameBoard() {
       <div className="flex-1 grid grid-cols-7 gap-2 relative z-10">
         {/* Заголовки категорий */}
         {roundData.map((cat) => (
-          <div key={cat.name} className="text-center bg-night/60 border border-gold/30 rounded-t-lg overflow-hidden">
-            <div className="w-full aspect-[2/1] overflow-hidden">
+          <div key={cat.name} className="text-center bg-night/60 border border-gold/30 rounded-t-lg overflow-hidden h-[110px] flex flex-col">
+            <div className="flex-1 overflow-hidden">
               <CategoryIcon name={cat.name} />
             </div>
-            <div className="text-gold font-title text-2xl leading-tight px-1 py-1 min-h-[2.5rem] flex items-center justify-center uppercase tracking-wider">
+            <div className="text-gold font-title text-2xl leading-tight px-1 py-0.5 flex items-center justify-center uppercase tracking-wider shrink-0">
               {cat.name}
             </div>
           </div>
