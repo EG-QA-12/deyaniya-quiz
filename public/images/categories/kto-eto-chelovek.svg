@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect x="2" y="2" width="196" height="196" rx="6" fill="#1a1a2e" stroke="#c9a84c" stroke-width="2"/>
+  <!-- Нимб -->
+  <circle cx="100" cy="65" r="32" stroke="#c9a84c" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <circle cx="100" cy="65" r="28" stroke="#c9a84c" stroke-width="0.5" fill="none" opacity="0.2"/>
+  <!-- Голова -->
+  <ellipse cx="100" cy="65" rx="15" ry="18" fill="none" stroke="#c9a84c" stroke-width="2.5"/>
+  <!-- Тело -->
+  <path d="M78 90 L60 170 L140 170 L122 90 Z" fill="none" stroke="#c9a84c" stroke-width="2.5"/>
+  <line x1="100" y1="90" x2="100" y2="170" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
+  <!-- Свиток -->
+  <rect x="120" y="105" width="8" height="35" rx="2" fill="none" stroke="#c9a84c" stroke-width="1.5" transform="rotate(10, 124, 122)"/>
+  <!-- Крест -->
+  <line x1="100" y1="20" x2="100" y2="40" stroke="#c9a84c" stroke-width="2"/>
+  <line x1="90" y1="30" x2="110" y2="30" stroke="#c9a84c" stroke-width="2"/>
+</svg>

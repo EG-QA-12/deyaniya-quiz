@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect x="2" y="2" width="196" height="196" rx="6" fill="#1a1a2e" stroke="#c9a84c" stroke-width="2"/>
+  <!-- Свечение -->
+  <circle cx="100" cy="55" r="40" stroke="#c9a84c" stroke-width="0.5" fill="none" opacity="0.2"/>
+  <!-- Вопрос -->
+  <text x="100" y="65" text-anchor="middle" fill="#c9a84c" font-size="48" font-family="serif" font-weight="bold" opacity="0.85">?</text>
+  <!-- Сундук -->
+  <rect x="35" y="85" width="130" height="85" rx="4" fill="#2a1a0e" stroke="#c9a84c" stroke-width="2.5"/>
+  <!-- Крышка -->
+  <path d="M30 85 Q100 65 170 85" stroke="#c9a84c" stroke-width="2.5" fill="none"/>
+  <!-- Замок -->
+  <rect x="90" y="108" width="20" height="18" rx="3" fill="#c9a84c" opacity="0.6"/>
+  <circle cx="100" cy="117" r="4" fill="#1a1a2e" stroke="#c9a84c" stroke-width="1.5"/>
+  <!-- Декоративные линии -->
+  <line x1="45" y1="115" x2="85" y2="115" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+  <line x1="115" y1="115" x2="155" y2="115" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+  <line x1="45" y1="135" x2="155" y2="135" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+  <line x1="45" y1="155" x2="155" y2="155" stroke="#c9a84c" stroke-width="0.5" opacity="0.3"/>
+</svg>

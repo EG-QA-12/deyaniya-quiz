@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect x="2" y="2" width="196" height="196" rx="6" fill="#1a1a2e" stroke="#c9a84c" stroke-width="2"/>
+  <!-- Свиток -->
+  <path d="M25 45 Q100 35 175 45 L175 155 Q100 165 25 155 Z" fill="#2a1a0e" stroke="#c9a84c" stroke-width="2"/>
+  <!-- Верхний валик -->
+  <rect x="20" y="40" width="160" height="10" rx="4" fill="#c9a84c" opacity="0.6"/>
+  <!-- Нижний валик -->
+  <rect x="20" y="150" width="160" height="10" rx="4" fill="#c9a84c" opacity="0.6"/>
+  <!-- Текст -->
+  <text x="100" y="80" text-anchor="middle" fill="#c9a84c" font-size="10" font-family="serif" opacity="0.85">«И будете Мне</text>
+  <text x="100" y="98" text-anchor="middle" fill="#c9a84c" font-size="10" font-family="serif" opacity="0.85">свидетелями...»</text>
+  <text x="100" y="122" text-anchor="middle" fill="#c9a84c" font-size="8" font-family="serif" opacity="0.4">Деян. 1:8</text>
+  <!-- Кавычка -->
+  <text x="35" y="75" fill="#c9a84c" font-size="24" font-family="serif" opacity="0.25">«</text>
+</svg>

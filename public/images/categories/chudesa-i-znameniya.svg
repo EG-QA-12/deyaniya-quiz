@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect x="2" y="2" width="196" height="196" rx="6" fill="#1a1a2e" stroke="#c9a84c" stroke-width="2"/>
+  <!-- Лучи -->
+  <line x1="100" y1="25" x2="50" y2="110" stroke="#c9a84c" stroke-width="2" opacity="0.35"/>
+  <line x1="100" y1="25" x2="70" y2="110" stroke="#c9a84c" stroke-width="2" opacity="0.5"/>
+  <line x1="100" y1="25" x2="100" y2="110" stroke="#c9a84c" stroke-width="2.5" opacity="0.6"/>
+  <line x1="100" y1="25" x2="130" y2="110" stroke="#c9a84c" stroke-width="2" opacity="0.5"/>
+  <line x1="100" y1="25" x2="150" y2="110" stroke="#c9a84c" stroke-width="2" opacity="0.35"/>
+  <!-- Источник -->
+  <circle cx="100" cy="30" r="14" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.3"/>
+  <circle cx="100" cy="30" r="9" fill="none" stroke="#c9a84c" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="100" cy="30" r="5" fill="#c9a84c" opacity="0.8"/>
+  <!-- Звёзды -->
+  <circle cx="40" cy="35" r="2" fill="#c9a84c" opacity="0.5"/>
+  <circle cx="160" cy="30" r="2" fill="#c9a84c" opacity="0.5"/>
+  <circle cx="60" cy="20" r="1.5" fill="#c9a84c" opacity="0.4"/>
+  <circle cx="140" cy="22" r="1.5" fill="#c9a84c" opacity="0.4"/>
+  <circle cx="30" cy="55" r="1" fill="#c9a84c" opacity="0.3"/>
+  <circle cx="170" cy="50" r="1" fill="#c9a84c" opacity="0.3"/>
+  <!-- Земля -->
+  <path d="M30 155 Q60 145 100 150 Q140 145 170 155" stroke="#c9a84c" stroke-width="2" fill="none" opacity="0.4"/>
+</svg>

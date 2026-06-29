@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect x="2" y="2" width="196" height="196" rx="6" fill="#1a1a2e" stroke="#c9a84c" stroke-width="2"/>
+  <!-- Нимб -->
+  <circle cx="100" cy="65" r="28" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.3"/>
+  <!-- Голубь - тело -->
+  <ellipse cx="100" cy="95" rx="28" ry="16" fill="none" stroke="#c9a84c" stroke-width="2.5"/>
+  <!-- Крылья -->
+  <path d="M75 90 Q55 65 90 80" fill="none" stroke="#c9a84c" stroke-width="2"/>
+  <path d="M125 90 Q145 65 110 80" fill="none" stroke="#c9a84c" stroke-width="2"/>
+  <!-- Голова -->
+  <circle cx="122" cy="88" r="9" fill="none" stroke="#c9a84c" stroke-width="2"/>
+  <!-- Клюв -->
+  <polygon points="130,86 140,88 130,91" fill="#c9a84c" opacity="0.7"/>
+  <!-- Оливковая ветвь -->
+  <path d="M128 95 Q140 105 148 115" stroke="#c9a84c" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <ellipse cx="148" cy="115" rx="5" ry="3" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.7"/>
+  <ellipse cx="140" cy="107" rx="4" ry="2.5" fill="none" stroke="#c9a84c" stroke-width="1" opacity="0.7"/>
+  <!-- Пламя Пятидесятницы -->
+  <path d="M85 140 Q92 125 100 140 Q108 125 115 140" fill="none" stroke="#c9a84c" stroke-width="2" opacity="0.6"/>
+  <path d="M90 148 Q95 138 100 148 Q105 138 110 148" fill="none" stroke="#c9a84c" stroke-width="1.5" opacity="0.4"/>
+</svg>
