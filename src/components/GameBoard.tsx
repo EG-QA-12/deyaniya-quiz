@@ -33,8 +33,8 @@ export function GameBoard() {
 
       {/* Верхняя панель */}
       <div className="flex justify-between items-center mb-4 relative z-10">
-        <h1 className="text-2xl font-title text-gold">
-          Раунд {currentRound}
+        <h1 className="text-2xl font-title text-gold uppercase tracking-wider">
+          РАУНД {currentRound}
         </h1>
         <div className="flex gap-3">
           <button
