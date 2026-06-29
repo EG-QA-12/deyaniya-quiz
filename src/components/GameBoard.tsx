@@ -3,6 +3,7 @@ import { round1 } from '../data/round1';
 import { round2 } from '../data/round2';
 import { round3 } from '../data/round3';
 import type { CategoryData } from '../data/types';
+import { CategoryIcon } from './CategoryIcon';
 
 function getRoundData(round: number): CategoryData[] {
   switch (round) {
@@ -65,7 +66,9 @@ export function GameBoard() {
         {/* Заголовки категорий */}
         {roundData.map((cat) => (
           <div key={cat.name} className="text-center p-2 bg-night/60 border border-gold/30 rounded-t-lg">
-            <span className="text-2xl">{cat.icon}</span>
+            <div className="flex justify-center mb-1">
+              <CategoryIcon name={cat.name} size={36} />
+            </div>
             <div className="text-gold text-xs font-semibold mt-1 leading-tight">{cat.name}</div>
           </div>
         ))}
