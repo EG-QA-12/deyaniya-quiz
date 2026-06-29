@@ -55,7 +55,7 @@ export function CategoryIcon({ name, size = 48 }: CategoryIconProps) {
 
   return (
     <img
-      src={`/images/categories/${fileName}.jpg`}
+      src={`${import.meta.env.BASE_URL}images/categories/${fileName}.jpg`}
       alt={name}
       style={{
         width: '100%',
