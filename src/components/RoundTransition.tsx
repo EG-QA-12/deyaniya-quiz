@@ -3,7 +3,7 @@ import { useGameStore } from '../store/gameStore';
 export function RoundTransition() {
   const {
     teams, currentRound, eliminatedIds, toggleElimination,
-    confirmElimination, setScreen,
+    confirmElimination, setScreen, convertMinutesToScore, convertAllMinutes,
   } = useGameStore();
 
   const activeTeams = teams
@@ -21,7 +21,7 @@ export function RoundTransition() {
           Отметьте команды, которые выбывают (по умолчанию — 3 худших)
         </p>
 
-        <div className="space-y-2 mb-8">
+        <div className="space-y-2 mb-6">
           {activeTeams.map((team, index) => {
             const isEliminated = eliminatedIds.includes(team.id);
             return (
@@ -38,6 +38,9 @@ export function RoundTransition() {
               >
                 <span className="font-bold text-xl w-8 text-center text-gold">{index + 1}</span>
                 <span className="flex-1 text-lg">{team.name}</span>
+                <span className="text-purple text-sm mr-2" title="Бонусные минуты">
+                  {team.bonusMinutes > 0 ? `⏱${team.bonusMinutes} мин` : ''}
+                </span>
                 <span className={`font-bold text-lg ${team.score >= 0 ? 'text-green' : 'text-red'}`}>
                   {team.score > 0 ? '+' : ''}{team.score}
                 </span>
@@ -46,6 +49,36 @@ export function RoundTransition() {
             );
           })}
         </div>
+
+        {/* Конвертация минут */}
+        {activeTeams.some((t) => t.bonusMinutes > 0) && (
+          <div className="border border-gold/20 rounded-lg p-4 mb-6 bg-night/40">
+            <h3 className="text-gold font-semibold mb-3 text-center">Конвертация бонусных минут</h3>
+            <p className="text-pergament/60 text-sm text-center mb-3">1 минута = 100 баллов</p>
+            <div className="space-y-2">
+              {activeTeams.filter((t) => t.bonusMinutes > 0).map((team) => (
+                <div key={team.id} className="flex items-center justify-between gap-3">
+                  <span className="text-pergament">{team.name}</span>
+                  <span className="text-purple">⏱ {team.bonusMinutes} мин = {team.bonusMinutes * 100} баллов</span>
+                  <button
+                    onClick={() => convertMinutesToScore(team.id, team.bonusMinutes)}
+                    className="px-4 py-1 bg-gold/80 hover:bg-gold text-night text-sm rounded transition-colors"
+                  >
+                    Конвертировать
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-3">
+              <button
+                onClick={convertAllMinutes}
+                className="px-6 py-2 bg-purple/80 hover:bg-purple text-white text-sm rounded transition-colors"
+              >
+                Конвертировать всё
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="flex gap-4 justify-center">
           <button

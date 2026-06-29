@@ -16,7 +16,7 @@ function getRoundData(round: number): CategoryData[] {
 export function GameBoard() {
   const {
     currentRound, teams, roundOrder, currentTeamIndex,
-    questionStates, selectQuestion, setScreen, saveGame,
+    questionStates, selectQuestion, setScreen, saveGame, finishRound,
   } = useGameStore();
 
   const roundData = getRoundData(currentRound);
@@ -47,6 +47,15 @@ export function GameBoard() {
             className="px-4 py-2 border border-gold/30 text-gold rounded-lg text-sm hover:bg-gold/10 transition-colors"
           >
             💾 Сохранить
+          </button>
+          <button
+            onClick={() => {
+              saveGame();
+              finishRound();
+            }}
+            className="px-4 py-2 bg-red/80 hover:bg-red text-white rounded-lg text-sm transition-colors"
+          >
+            🏁 Завершить раунд
           </button>
         </div>
       </div>
@@ -116,6 +125,9 @@ export function GameBoard() {
                 }`}
               >
                 {team.name}: {team.score}
+                {team.bonusMinutes > 0 && (
+                  <span className="ml-1 text-purple" title="Бонусные минуты">⏱{team.bonusMinutes}</span>
+                )}
               </span>
             ))}
           </div>

@@ -13,6 +13,8 @@ export interface Team {
   id: string;
   name: string;
   score: number;
+  bonusMinutes: number;      // Накопленные минуты (досрочные ответы)
+  roundWins: number[];       // Номера раундов, которые команда выиграла
   isActive: boolean;
   eliminatedInRound: number | null;
 }

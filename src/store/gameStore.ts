@@ -71,6 +71,14 @@ interface GameState {
   answerForTeam: (teamId: string, questionId: string, result: AnswerResult) => void;
   closeQuestion: () => void;
 
+  // Бонусные минуты
+  awardBonusMinute: (teamId: string) => void;
+  useBonusMinute: (teamId: string) => void;
+  convertMinutesToScore: (teamId: string, minutes: number) => void;
+  convertAllMinutes: () => void;
+  declareRoundWinner: (teamId: string) => void;
+  resetScores: () => void;
+
   // Таймер
   timerRunning: boolean;
   timerSeconds: number;
@@ -101,7 +109,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   teams: [],
   addTeam: (name) =>
     set((state) => ({
-      teams: [...state.teams, { id: generateId(), name, score: 0, isActive: true, eliminatedInRound: null }],
+      teams: [...state.teams, { id: generateId(), name, score: 0, bonusMinutes: 0, roundWins: [], isActive: true, eliminatedInRound: null }],
     })),
   removeTeam: (id) =>
     set((state) => ({
@@ -151,9 +159,9 @@ export const useGameStore = create<GameState>((set, get) => ({
     else if (round === 2) eliminateCount = activeTeams.length - 5;
 
     if (eliminateCount <= 0) {
-      // Никто не выбывает — просто переходим
+      // Никто не выбывает — просто переходим к жеребьёвке
       set({
-        screen: 'game-board',
+        screen: 'draw-order',
         currentRound: round + 1,
         roundStarted: false,
         questionStates: {},
@@ -218,6 +226,9 @@ export const useGameStore = create<GameState>((set, get) => ({
     const question = state.openQuestion;
     if (!question) return;
 
+    // Блокировка: если команда уже пробовала — игнорируем
+    if (state.openQuestionAttempts.includes(teamId)) return;
+
     const value = result === 'correct' ? question.value : result === 'wrong' ? -question.value : 0;
 
     set((s) => ({
@@ -241,6 +252,9 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
   answerForTeam: (teamId, questionId, result) => {
     const state = get();
+    // Блокировка: если команда уже пробовала — игнорируем
+    if (state.openQuestionAttempts.includes(teamId)) return;
+
     const allQuestions = getAllQuestions(state.currentRound);
     const question = allQuestions.find((q) => q.id === questionId);
     if (!question) return;
@@ -258,6 +272,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           answeredCorrectly: result === 'correct',
         },
       },
+      openQuestionAttempts: [...s.openQuestionAttempts, teamId],
     }));
 
     if (result === 'correct') {
@@ -290,6 +305,59 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     // Переход хода к следующей команде
     state.nextTeam();
+  },
+
+  // === Бонусные минуты ===
+  awardBonusMinute: (teamId) => {
+    set((s) => ({
+      teams: s.teams.map((t) =>
+        t.id === teamId ? { ...t, bonusMinutes: t.bonusMinutes + 1 } : t
+      ),
+    }));
+  },
+  useBonusMinute: (teamId) => {
+    const state = get();
+    const team = state.teams.find((t) => t.id === teamId);
+    if (!team || team.bonusMinutes < 1) return;
+    set((s) => ({
+      teams: s.teams.map((t) =>
+        t.id === teamId ? { ...t, bonusMinutes: t.bonusMinutes - 1 } : t
+      ),
+      timerSeconds: 60,
+    }));
+  },
+  convertMinutesToScore: (teamId, minutes) => {
+    set((s) => ({
+      teams: s.teams.map((t) =>
+        t.id === teamId
+          ? { ...t, bonusMinutes: t.bonusMinutes - minutes, score: t.score + minutes * 100 }
+          : t
+      ),
+    }));
+  },
+  convertAllMinutes: () => {
+    set((s) => ({
+      teams: s.teams.map((t) => ({
+        ...t,
+        score: t.score + t.bonusMinutes * 100,
+        bonusMinutes: 0,
+      })),
+    }));
+  },
+  declareRoundWinner: (teamId) => {
+    const state = get();
+    set((s) => ({
+      teams: s.teams.map((t) =>
+        t.id === teamId
+          ? { ...t, roundWins: [...t.roundWins, state.currentRound] }
+          : t
+      ),
+    }));
+  },
+  resetScores: () => {
+    set((s) => ({
+      teams: s.teams.map((t) => ({ ...t, score: 0 })),
+    }));
   },
 
   // === Таймер ===
@@ -329,13 +397,28 @@ export const useGameStore = create<GameState>((set, get) => ({
     const state = get();
     const nextRound = state.currentRound + 1;
 
+    // Определяем победителя текущего раунда
+    const activeTeams = state.teams
+      .filter((t) => t.isActive && t.eliminatedInRound === null && !state.eliminatedIds.includes(t.id))
+      .sort((a, b) => b.score - a.score);
+    const winner = activeTeams.length > 0 ? activeTeams[0].id : null;
+
     set((s) => ({
-      teams: s.teams.map((t) =>
-        state.eliminatedIds.includes(t.id) ? { ...t, eliminatedInRound: state.currentRound, isActive: false } : t
-      ),
+      teams: s.teams.map((t) => {
+        let updated = { ...t };
+        if (state.eliminatedIds.includes(t.id)) {
+          updated = { ...updated, eliminatedInRound: state.currentRound, isActive: false };
+        }
+        if (t.id === winner) {
+          updated = { ...updated, roundWins: [...updated.roundWins, state.currentRound] };
+        }
+        // Сброс очков, минуты остаются
+        updated = { ...updated, score: 0 };
+        return updated;
+      }),
       eliminationMode: false,
       eliminatedIds: [],
-      screen: 'game-board',
+      screen: 'draw-order',
       currentRound: nextRound,
       roundStarted: false,
       questionStates: {},

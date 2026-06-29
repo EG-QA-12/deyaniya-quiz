@@ -64,31 +64,31 @@ export const round1: CategoryData[] = [
     ],
   },
   {
-    name: 'Магия цифр',
+    name: 'Цифры',
     icon: '🔢',
     questions: [
       {
-        id: 'r1-c3-100', round: 1, category: 'Магия цифр', categoryIcon: '🔢', value: 100,
+        id: 'r1-c3-100', round: 1, category: 'Цифры', categoryIcon: '🔢', value: 100,
         text: 'Сколько человек уверовало в день Пятидесятницы?',
         answer: 'Около 3 000 (Деян. 2:41)', isCatInBag: false,
       },
       {
-        id: 'r1-c3-200', round: 1, category: 'Магия цифр', categoryIcon: '🔢', value: 200,
+        id: 'r1-c3-200', round: 1, category: 'Цифры', categoryIcon: '🔢', value: 200,
         text: 'Сколько мужей было избрано для служения вдовам?',
         answer: '7 (Деян. 6:3)', isCatInBag: false,
       },
       {
-        id: 'r1-c3-300', round: 1, category: 'Магия цифр', categoryIcon: '🔢', value: 300,
+        id: 'r1-c3-300', round: 1, category: 'Цифры', categoryIcon: '🔢', value: 300,
         text: 'Сколько дней Савл не ел и не пил после встречи с Иисусом?',
         answer: '3 дня (Деян. 9:9)', isCatInBag: false,
       },
       {
-        id: 'r1-c3-400', round: 1, category: 'Магия цифр', categoryIcon: '🔢', value: 400,
+        id: 'r1-c3-400', round: 1, category: 'Цифры', categoryIcon: '🔢', value: 400,
         text: 'Сколько человек было на корабле, потерпевшем крушение у берегов Мальты?',
         answer: '276 (Деян. 27:37)', isCatInBag: false,
       },
       {
-        id: 'r1-c3-500', round: 1, category: 'Магия цифр', categoryIcon: '🔢', value: 500,
+        id: 'r1-c3-500', round: 1, category: 'Цифры', categoryIcon: '🔢', value: 500,
         text: 'Сколько воинов охраняло Павла по дороге из Иерусалима в Кесарию?',
         answer: '470 (70 + 200 + 200) (Деян. 23:23)', isCatInBag: false,
       },

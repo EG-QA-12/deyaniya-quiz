@@ -5,11 +5,12 @@ export function QuestionModal() {
   const {
     openQuestion, openQuestionAttempts, teams, roundOrder, currentTeamIndex,
     timerRunning, timerSeconds, tickTimer, answerQuestion, answerForTeam,
-    closeQuestion, questionStates,
+    closeQuestion, questionStates, awardBonusMinute, useBonusMinute,
   } = useGameStore();
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const currentTeam = teams.find((t) => t.id === roundOrder[currentTeamIndex]);
+  const currentTeamMinutes = currentTeam?.bonusMinutes ?? 0;
 
   // Таймер
   useEffect(() => {
@@ -96,6 +97,32 @@ export function QuestionModal() {
         {/* Кнопки для ведущего */}
         {!isAnswered && (
           <div className="space-y-4">
+            {/* Бонусные минуты */}
+            <div className="flex gap-3 justify-center items-center">
+              {currentTeam && (
+                <>
+                  <span className="text-gold/70 text-sm">
+                    ⏱ {currentTeam.name}: {currentTeamMinutes} мин.
+                  </span>
+                  <button
+                    onClick={() => { awardBonusMinute(currentTeam.id); }}
+                    className="px-4 py-2 bg-purple/60 hover:bg-purple text-white text-sm rounded-lg transition-colors"
+                    title="Команда ответила досрочно"
+                  >
+                    ⚡ Досрочно (+1 мин)
+                  </button>
+                  <button
+                    onClick={() => { useBonusMinute(currentTeam.id); }}
+                    disabled={currentTeamMinutes < 1}
+                    className="px-4 py-2 bg-gold/60 hover:bg-gold text-night text-sm rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    title="Взять дополнительную минуту на обдумывание"
+                  >
+                    ⏰ +1 мин (осталось: {currentTeamMinutes})
+                  </button>
+                </>
+              )}
+            </div>
+
             {/* Основные кнопки */}
             <div className="flex gap-3 justify-center">
               <button
@@ -150,17 +177,15 @@ export function QuestionModal() {
           </div>
         )}
 
-        {/* Кнопка закрытия */}
-        {isAnswered && (
-          <div className="text-center mt-6">
-            <button
-              onClick={closeQuestion}
-              className="px-8 py-3 bg-gold text-night font-bold text-lg rounded-xl hover:bg-gold-light transition-all hover:scale-105"
-            >
-              Закрыть вопрос
-            </button>
-          </div>
-        )}
+        {/* Кнопка закрытия — всегда доступна */}
+        <div className="text-center mt-6">
+          <button
+            onClick={closeQuestion}
+            className="px-8 py-3 bg-gold text-night font-bold text-lg rounded-xl hover:bg-gold-light transition-all hover:scale-105"
+          >
+            {isAnswered ? 'Закрыть вопрос' : 'Закрыть вопрос (без верного ответа)'}
+          </button>
+        </div>
 
         {/* Информация об очередности */}
         <div className="mt-4 text-center text-pergament/50 text-sm">
