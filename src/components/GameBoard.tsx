@@ -69,7 +69,7 @@ export function GameBoard() {
             <div className="w-full aspect-video overflow-hidden">
               <CategoryIcon name={cat.name} />
             </div>
-            <div className="text-gold font-title text-sm leading-tight px-1 py-1.5 min-h-[2.5rem] flex items-center justify-center">
+            <div className="text-gold font-title text-base leading-tight px-1 py-2 min-h-[3rem] flex items-center justify-center">
               {cat.name}
             </div>
           </div>

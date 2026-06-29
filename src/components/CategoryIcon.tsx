@@ -5,6 +5,7 @@ interface CategoryIconProps {
 
 // Маппинг названий категорий на имена файлов
 const iconMap: Record<string, string> = {
+  // Раунд 1 — оригинальные
   'Адреса и города': 'adresa-i-goroda',
   'Кто этот человек?': 'kto-eto-chelovek',
   'Цифры': 'cifry',
@@ -12,19 +13,23 @@ const iconMap: Record<string, string> = {
   'Угадай цитату': 'ugadaj-citatu',
   'Дела церкви': 'dela-cerkvi',
   'Друг или враг? — КОТ В МЕШКЕ': 'kot-v-meshke',
-  'География миссии': 'adresa-i-goroda',
-  'День Пятидесятницы': 'chudesa-i-znameniya',
-  'Персонажи власти': 'kto-eto-chelovek',
-  'Заверши событие': 'ugadaj-citatu',
-  'Пророки и Писания': 'cifry',
-  'Тюрьмы и побеги': 'kot-v-meshke',
-  'КОТ В МЕШКЕ': 'kot-v-meshke',
-  'Богословие в действии': 'dela-cerkvi',
-  'Миссионерские путешествия': 'adresa-i-goroda',
-  'Первые и единственные': 'cifry',
-  'Неожиданные повороты': 'kot-v-meshke',
-  'Молниеносный раунд': 'chudesa-i-znameniya',
-  'Свяжи события': 'ugadaj-citatu',
+
+  // Раунд 2
+  'География миссии': 'adresa-i-goroda',          // совпадает
+  'День Пятидесятницы': 'chudesa-i-znameniya',     // совпадает
+  'Персонажи власти': 'personazhi-vlasti',         // новая
+  'Заверши событие': 'zavershi-sobytie',           // новая
+  'Пророки и Писания': 'proroki-i-pisaniya',       // новая
+  'Тюрьмы и побеги': 'tyurmy-i-pobegi',            // новая
+  'КОТ В МЕШКЕ': 'kot-v-meshke',                   // совпадает
+
+  // Раунд 3
+  'Богословие в действии': 'bogoslovie-v-dejstvii', // новая
+  'Миссионерские путешествия': 'adresa-i-goroda',   // совпадает
+  'Первые и единственные': 'pervye-i-edinstvennye',  // новая
+  'Неожиданные повороты': 'neozhidannye-povoroty',   // новая
+  'Молниеносный раунд': 'molnienosnyj-raund',        // новая
+  'Свяжи события': 'svyazi-sobytiya',               // новая
 };
 
 export function CategoryIcon({ name, size = 48 }: CategoryIconProps) {
