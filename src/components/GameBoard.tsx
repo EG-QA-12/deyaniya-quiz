@@ -66,7 +66,7 @@ export function GameBoard() {
         {/* Заголовки категорий */}
         {roundData.map((cat) => (
           <div key={cat.name} className="text-center bg-night/60 border border-gold/30 rounded-t-lg overflow-hidden flex flex-col">
-            <div className="overflow-hidden" style={{ height: '56px' }}>
+            <div className="overflow-hidden" style={{ height: '48px' }}>
               <CategoryIcon name={cat.name} />
             </div>
             <div className="text-gold font-title text-2xl leading-tight px-1 py-0.5 flex items-center justify-center uppercase tracking-wider shrink-0">
