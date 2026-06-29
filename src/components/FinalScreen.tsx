@@ -1,13 +1,11 @@
 import { useGameStore } from '../store/gameStore';
 
 export function FinalScreen() {
-  const { teams, resetGame } = useGameStore();
+  const { teams, resetGame, convertMinutesToScore, convertAllMinutes } = useGameStore();
 
-  const sorted = [...teams]
-    .filter((t) => t.isActive)
-    .sort((a, b) => b.score - a.score);
-
-  const top3 = sorted.slice(0, 3);
+  const sorted = [...teams].sort((a, b) => b.score - a.score);
+  const activeTeams = sorted.filter((t) => t.isActive);
+  const top3 = activeTeams.slice(0, 3);
 
   const medals = ['🥇', '🥈', '🥉'];
   const podiumHeights = ['h-48', 'h-36', 'h-28'];
@@ -20,7 +18,7 @@ export function FinalScreen() {
         <p className="text-pergament/70 text-xl mb-12">Благословение Господне — оно обогащает</p>
 
         {/* Пьедестал */}
-        <div className="flex items-end justify-center gap-6 mb-12">
+        <div className="flex items-end justify-center gap-6 mb-8">
           {/* 2-е место */}
           {top3[1] && (
             <div className="flex flex-col items-center">
@@ -58,6 +56,36 @@ export function FinalScreen() {
           )}
         </div>
 
+        {/* Конвертация минут */}
+        {activeTeams.some((t) => t.bonusMinutes > 0) && (
+          <div className="border border-gold/20 rounded-lg p-4 mb-6 max-w-md mx-auto bg-night/40">
+            <h3 className="text-gold font-semibold mb-2 text-center">Конвертация бонусных минут</h3>
+            <p className="text-pergament/60 text-sm text-center mb-3">1 минута = 100 баллов</p>
+            <div className="space-y-2">
+              {activeTeams.filter((t) => t.bonusMinutes > 0).map((team) => (
+                <div key={team.id} className="flex items-center justify-between gap-3">
+                  <span className="text-pergament text-sm">{team.name}</span>
+                  <span className="text-purple text-sm">⏱ {team.bonusMinutes} мин = {team.bonusMinutes * 100} баллов</span>
+                  <button
+                    onClick={() => convertMinutesToScore(team.id, team.bonusMinutes)}
+                    className="px-3 py-1 bg-gold/80 hover:bg-gold text-night text-xs rounded transition-colors"
+                  >
+                    Конвертировать
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-2">
+              <button
+                onClick={convertAllMinutes}
+                className="px-4 py-1 bg-purple/80 hover:bg-purple text-white text-xs rounded transition-colors"
+              >
+                Конвертировать всё
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Полная таблица */}
         <div className="max-w-md mx-auto mb-8">
           {sorted.map((team, index) => (
@@ -66,10 +94,25 @@ export function FinalScreen() {
               className="flex items-center gap-3 p-2 border-b border-gold/10 text-pergament/70"
             >
               <span className="w-6 text-gold text-sm">{index + 1}</span>
-              <span className="flex-1 text-left">{team.name}</span>
+              <span className="flex-1 text-left">
+                {team.name}
+                {team.roundWins.length > 0 && (
+                  <span className="ml-2 text-gold text-xs" title="Победы в раундах">
+                    {'🏆'.repeat(team.roundWins.length)}
+                  </span>
+                )}
+              </span>
+              {team.bonusMinutes > 0 && (
+                <span className="text-purple text-xs mr-1">⏱{team.bonusMinutes}</span>
+              )}
               <span className={team.score >= 0 ? 'text-green' : 'text-red'}>
                 {team.score}
               </span>
+              {team.eliminatedInRound && (
+                <span className="text-red/40 text-xs ml-1">
+                  (выбыли)
+                </span>
+              )}
             </div>
           ))}
         </div>

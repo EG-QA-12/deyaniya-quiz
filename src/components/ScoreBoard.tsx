@@ -4,7 +4,6 @@ export function ScoreBoard() {
   const { teams, currentRound, setScreen } = useGameStore();
 
   const sortedTeams = [...teams]
-    .filter((t) => t.isActive)
     .sort((a, b) => b.score - a.score);
 
   return (

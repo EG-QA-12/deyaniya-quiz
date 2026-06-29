@@ -40,6 +40,7 @@ export interface CategoryData {
 export interface SavedGame {
   version: number;
   timestamp: string;
+  screen: string;
   teams: Team[];
   currentRound: number;
   questionStates: Record<string, QuestionState>;
@@ -48,4 +49,7 @@ export interface SavedGame {
   openQuestionId: string | null;
   openQuestionAttempts: string[];
   roundStarted: boolean;
+  timerSeconds: number;
+  eliminationMode: boolean;
+  eliminatedIds: string[];
 }

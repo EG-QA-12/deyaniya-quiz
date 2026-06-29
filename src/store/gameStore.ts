@@ -436,6 +436,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const saved: SavedGame = {
       version: CURRENT_VERSION,
       timestamp: new Date().toISOString(),
+      screen: state.screen,
       teams: state.teams,
       currentRound: state.currentRound,
       questionStates: state.questionStates,
@@ -444,6 +445,9 @@ export const useGameStore = create<GameState>((set, get) => ({
       openQuestionId: state.openQuestionId,
       openQuestionAttempts: state.openQuestionAttempts,
       roundStarted: state.roundStarted,
+      timerSeconds: state.timerSeconds,
+      eliminationMode: state.eliminationMode,
+      eliminatedIds: state.eliminatedIds,
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(saved));
   },
@@ -452,16 +456,26 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (!raw) return false;
     try {
       const saved: SavedGame = JSON.parse(raw);
+      // Восстанавливаем объект вопроса, если был открыт
+      let openQuestion = null;
+      if (saved.openQuestionId) {
+        const allQuestions = getAllQuestions(saved.currentRound);
+        openQuestion = allQuestions.find((q) => q.id === saved.openQuestionId) || null;
+      }
       set({
+        screen: (saved.screen as Screen) || (saved.roundStarted ? 'game-board' : 'start'),
         teams: saved.teams,
         currentRound: saved.currentRound,
         questionStates: saved.questionStates,
         currentTeamIndex: saved.currentTeamIndex,
         roundOrder: saved.roundOrder,
         openQuestionId: saved.openQuestionId,
+        openQuestion,
         openQuestionAttempts: saved.openQuestionAttempts,
         roundStarted: saved.roundStarted,
-        screen: saved.roundStarted ? 'game-board' : 'start',
+        timerSeconds: saved.timerSeconds ?? 60,
+        eliminationMode: saved.eliminationMode ?? false,
+        eliminatedIds: saved.eliminatedIds ?? [],
       });
       return true;
     } catch {

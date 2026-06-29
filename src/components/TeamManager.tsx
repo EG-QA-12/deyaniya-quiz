@@ -10,6 +10,8 @@ export function TeamManager() {
   const handleAdd = () => {
     const name = newName.trim();
     if (!name) return;
+    if (teams.length >= 15) return;
+    if (teams.some((t) => t.name.toLowerCase() === name.toLowerCase())) return;
     addTeam(name);
     setNewName('');
   };
