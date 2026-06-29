@@ -69,6 +69,9 @@ export function GameBoard() {
             <div className="w-full aspect-video overflow-hidden">
               <CategoryIcon name={cat.name} />
             </div>
+            <div className="text-gold font-title text-sm leading-tight px-1 py-1.5 min-h-[2.5rem] flex items-center justify-center">
+              {cat.name}
+            </div>
           </div>
         ))}
 
@@ -100,7 +103,7 @@ export function GameBoard() {
                   ${question.isCatInBag && !isAnswered ? 'border-purple/50' : ''}
                 `}
               >
-                {isAnswered ? '✓' : question.isCatInBag ? '🎭' : value}
+                {isAnswered ? '✓' : value}
               </button>
             );
           })
