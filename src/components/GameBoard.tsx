@@ -114,8 +114,8 @@ export function GameBoard() {
               {currentTeam?.name || '—'}
             </span>
           </div>
-          <div className="flex gap-4 text-sm">
-            {activeTeams.slice(0, 5).map((team) => (
+          <div className="flex gap-4 text-sm flex-wrap justify-end">
+            {activeTeams.map((team) => (
               <span
                 key={team.id}
                 className={`px-2 py-1 rounded ${

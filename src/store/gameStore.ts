@@ -144,7 +144,13 @@ export const useGameStore = create<GameState>((set, get) => ({
     const round = state.currentRound;
 
     if (round === 3) {
-      set({ screen: 'final' });
+      // Авто-конвертация минут в баллы перед финалом
+      const teamsWithConverted = state.teams.map((t) => ({
+        ...t,
+        score: t.score + t.bonusMinutes * 100,
+        bonusMinutes: 0,
+      }));
+      set({ teams: teamsWithConverted, screen: 'final' });
       return;
     }
 
@@ -159,8 +165,14 @@ export const useGameStore = create<GameState>((set, get) => ({
     else if (round === 2) eliminateCount = activeTeams.length - 5;
 
     if (eliminateCount <= 0) {
-      // Никто не выбывает — просто переходим к жеребьёвке
+      // Никто не выбывает — конвертируем минуты и переходим к жеребьёвке
+      const teamsWithConverted = state.teams.map((t) => ({
+        ...t,
+        score: t.score + t.bonusMinutes * 100,
+        bonusMinutes: 0,
+      }));
       set({
+        teams: teamsWithConverted,
         screen: 'draw-order',
         currentRound: round + 1,
         roundStarted: false,
@@ -397,14 +409,21 @@ export const useGameStore = create<GameState>((set, get) => ({
     const state = get();
     const nextRound = state.currentRound + 1;
 
-    // Определяем победителя текущего раунда
-    const activeTeams = state.teams
+    // Авто-конвертация всех минут в баллы перед переходом
+    const teamsWithConverted = state.teams.map((t) => ({
+      ...t,
+      score: t.score + t.bonusMinutes * 100,
+      bonusMinutes: 0,
+    }));
+
+    // Определяем победителя текущего раунда (уже с конвертированными минутами)
+    const activeTeams = teamsWithConverted
       .filter((t) => t.isActive && t.eliminatedInRound === null && !state.eliminatedIds.includes(t.id))
       .sort((a, b) => b.score - a.score);
     const winner = activeTeams.length > 0 ? activeTeams[0].id : null;
 
-    set((s) => ({
-      teams: s.teams.map((t) => {
+    set({
+      teams: teamsWithConverted.map((t) => {
         let updated = { ...t };
         if (state.eliminatedIds.includes(t.id)) {
           updated = { ...updated, eliminatedInRound: state.currentRound, isActive: false };
@@ -412,7 +431,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         if (t.id === winner) {
           updated = { ...updated, roundWins: [...updated.roundWins, state.currentRound] };
         }
-        // Сброс очков, минуты остаются
+        // Сброс очков для нового раунда
         updated = { ...updated, score: 0 };
         return updated;
       }),
