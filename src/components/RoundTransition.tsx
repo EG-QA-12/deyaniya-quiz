@@ -24,6 +24,8 @@ export function RoundTransition() {
         <div className="space-y-2 mb-6">
           {activeTeams.map((team, index) => {
             const isEliminated = eliminatedIds.includes(team.id);
+            const place = team.roundPlaces[currentRound];
+            const placeEmoji = place === 1 ? '🥇' : place === 2 ? '🥈' : place === 3 ? '🥉' : '';
             return (
               <div
                 key={team.id}
@@ -32,12 +34,19 @@ export function RoundTransition() {
                   flex items-center gap-4 p-4 rounded-lg border cursor-pointer transition-all
                   ${isEliminated
                     ? 'bg-red/10 border-red/40 text-pergament/50'
-                    : 'bg-night/60 border-gold/20 text-pergament hover:border-gold'
+                    : place === 1
+                      ? 'bg-gold/10 border-gold/40 text-pergament'
+                      : place === 2
+                        ? 'bg-purple/10 border-purple/40 text-pergament'
+                        : place === 3
+                          ? 'bg-purple/5 border-purple/20 text-pergament'
+                          : 'bg-night/60 border-gold/20 text-pergament hover:border-gold'
                   }
                 `}
               >
-                <span className="font-bold text-xl w-8 text-center text-gold">{index + 1}</span>
+                <span className="font-bold text-xl w-8 text-center text-gold">{placeEmoji || (index + 1)}</span>
                 <span className="flex-1 text-lg">{team.name}</span>
+                {place && <span className="text-gold text-sm mr-2">{place}-е место</span>}
                 <span className="text-purple text-sm mr-2" title="Бонусные минуты">
                   {team.bonusMinutes > 0 ? `⏱${team.bonusMinutes} мин` : ''}
                 </span>

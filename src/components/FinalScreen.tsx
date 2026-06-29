@@ -102,6 +102,19 @@ export function FinalScreen() {
                   </span>
                 )}
               </span>
+              {/* Места по раундам */}
+              <div className="flex gap-1 text-xs mr-2">
+                {[1, 2, 3].map((r) => {
+                  const p = team.roundPlaces[r];
+                  if (!p) return null;
+                  const emoji = p === 1 ? '🥇' : p === 2 ? '🥈' : '🥉';
+                  return (
+                    <span key={r} className="text-pergament/50" title={`Раунд ${r}: ${p}-е место`}>
+                      {['', 'I', 'II', 'III'][r]}{emoji}
+                    </span>
+                  );
+                })}
+              </div>
               {team.bonusMinutes > 0 && (
                 <span className="text-purple text-xs mr-1">⏱{team.bonusMinutes}</span>
               )}

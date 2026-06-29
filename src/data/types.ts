@@ -15,6 +15,7 @@ export interface Team {
   score: number;
   bonusMinutes: number;      // Накопленные минуты (досрочные ответы)
   roundWins: number[];       // Номера раундов, которые команда выиграла
+  roundPlaces: Record<number, number>; // {номерРаунда: место} — 1, 2, 3
   isActive: boolean;
   eliminatedInRound: number | null;
 }

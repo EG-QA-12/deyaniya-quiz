@@ -109,7 +109,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   teams: [],
   addTeam: (name) =>
     set((state) => ({
-      teams: [...state.teams, { id: generateId(), name, score: 0, bonusMinutes: 0, roundWins: [], isActive: true, eliminatedInRound: null }],
+      teams: [...state.teams, { id: generateId(), name, score: 0, bonusMinutes: 0, roundWins: [], roundPlaces: {}, isActive: true, eliminatedInRound: null }],
     })),
   removeTeam: (id) =>
     set((state) => ({
@@ -143,36 +143,45 @@ export const useGameStore = create<GameState>((set, get) => ({
     const state = get();
     const round = state.currentRound;
 
-    if (round === 3) {
-      // Авто-конвертация минут в баллы перед финалом
-      const teamsWithConverted = state.teams.map((t) => ({
-        ...t,
-        score: t.score + t.bonusMinutes * 100,
-        bonusMinutes: 0,
-      }));
-      set({ teams: teamsWithConverted, screen: 'final' });
-      return;
-    }
+    // Авто-конвертация минут в баллы
+    const teamsWithConverted = state.teams.map((t) => ({
+      ...t,
+      score: t.score + t.bonusMinutes * 100,
+      bonusMinutes: 0,
+    }));
 
-    // Сортируем активные команды по очкам
-    const activeTeams = state.teams
+    // Фиксируем места в раунде (1-е, 2-е, 3-е)
+    const activeSorted = teamsWithConverted
       .filter((t) => t.isActive && t.eliminatedInRound === null)
       .sort((a, b) => b.score - a.score);
 
+    const teamsWithPlaces = teamsWithConverted.map((t) => {
+      const place = activeSorted.findIndex((a) => a.id === t.id);
+      if (place >= 0 && place < 3) {
+        return { ...t, roundPlaces: { ...t.roundPlaces, [round]: place + 1 } };
+      }
+      return t;
+    });
+
+    if (round === 3) {
+      set({ teams: teamsWithPlaces, screen: 'final' });
+      return;
+    }
+
     // Определяем, сколько выбывает
+    const totalActive = activeSorted.length;
     let eliminateCount = 0;
-    if (round === 1) eliminateCount = 3;
-    else if (round === 2) eliminateCount = activeTeams.length - 5;
+    if (round === 1) {
+      // 10+ команд → выбывает 3, иначе 2
+      eliminateCount = totalActive >= 10 ? 3 : 2;
+    } else if (round === 2) {
+      eliminateCount = totalActive - 5;
+    }
 
     if (eliminateCount <= 0) {
-      // Никто не выбывает — конвертируем минуты и переходим к жеребьёвке
-      const teamsWithConverted = state.teams.map((t) => ({
-        ...t,
-        score: t.score + t.bonusMinutes * 100,
-        bonusMinutes: 0,
-      }));
+      // Никто не выбывает — переходим к жеребьёвке
       set({
-        teams: teamsWithConverted,
+        teams: teamsWithPlaces,
         screen: 'draw-order',
         currentRound: round + 1,
         roundStarted: false,
@@ -187,8 +196,9 @@ export const useGameStore = create<GameState>((set, get) => ({
     }
 
     // Показываем экран отсева
-    const worstTeams = activeTeams.slice(-eliminateCount).map((t) => t.id);
+    const worstTeams = activeSorted.slice(-eliminateCount).map((t) => t.id);
     set({
+      teams: teamsWithPlaces,
       screen: 'round-transition',
       eliminationMode: true,
       eliminatedIds: worstTeams,
@@ -416,25 +426,30 @@ export const useGameStore = create<GameState>((set, get) => ({
       bonusMinutes: 0,
     }));
 
-    // Определяем победителя текущего раунда (уже с конвертированными минутами)
-    const activeTeams = teamsWithConverted
+    // Определяем места в раунде (1-е, 2-е, 3-е)
+    const activeSorted = teamsWithConverted
       .filter((t) => t.isActive && t.eliminatedInRound === null && !state.eliminatedIds.includes(t.id))
       .sort((a, b) => b.score - a.score);
-    const winner = activeTeams.length > 0 ? activeTeams[0].id : null;
+
+    const teamsWithPlaces = teamsWithConverted.map((t) => {
+      const place = activeSorted.findIndex((a) => a.id === t.id);
+      let updated = { ...t };
+      if (place >= 0 && place < 3) {
+        updated = { ...updated, roundPlaces: { ...updated.roundPlaces, [state.currentRound]: place + 1 } };
+      }
+      if (state.eliminatedIds.includes(t.id)) {
+        updated = { ...updated, eliminatedInRound: state.currentRound, isActive: false };
+      }
+      if (activeSorted.length > 0 && t.id === activeSorted[0].id) {
+        updated = { ...updated, roundWins: [...updated.roundWins, state.currentRound] };
+      }
+      // Сброс очков для нового раунда
+      updated = { ...updated, score: 0 };
+      return updated;
+    });
 
     set({
-      teams: teamsWithConverted.map((t) => {
-        let updated = { ...t };
-        if (state.eliminatedIds.includes(t.id)) {
-          updated = { ...updated, eliminatedInRound: state.currentRound, isActive: false };
-        }
-        if (t.id === winner) {
-          updated = { ...updated, roundWins: [...updated.roundWins, state.currentRound] };
-        }
-        // Сброс очков для нового раунда
-        updated = { ...updated, score: 0 };
-        return updated;
-      }),
+      teams: teamsWithPlaces,
       eliminationMode: false,
       eliminatedIds: [],
       screen: 'draw-order',
@@ -446,7 +461,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       openQuestionAttempts: [],
       currentTeamIndex: 0,
       roundOrder: [],
-    }));
+    });
   },
 
   // === Сохранение ===
