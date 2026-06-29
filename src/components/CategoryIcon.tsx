@@ -53,18 +53,13 @@ export function CategoryIcon({ name, size = 48 }: CategoryIconProps) {
     );
   }
 
-  const isFill = size >= 999;
-
   return (
     <img
       src={`/images/categories/${fileName}.jpg`}
       alt={name}
-      width={isFill ? undefined : size}
-      height={isFill ? undefined : size}
       style={{
-        width: isFill ? '100%' : size,
-        height: isFill ? '100%' : size,
-        borderRadius: isFill ? 0 : 6,
+        width: '100%',
+        height: '100%',
         objectFit: 'cover',
         display: 'block',
       }}
