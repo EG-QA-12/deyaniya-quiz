@@ -39,7 +39,7 @@ export function TeamManager() {
     setTeams(newTeams);
   };
 
-  const canStart = teams.length >= 10;
+  const canStart = teams.length >= 2;
 
   return (
     <div className="min-h-screen bg-night-sky p-8">
@@ -47,7 +47,7 @@ export function TeamManager() {
       <div className="max-w-2xl mx-auto relative z-10">
         <h1 className="text-3xl font-title text-gold mb-6 text-center">Управление командами</h1>
         <p className="text-pergament text-center mb-6">
-          Добавьте команды (от 10 до 15). Перетаскивайте для изменения порядка жеребьёвки.
+          Добавьте команды (от 2 до 15). Перетаскивайте для изменения порядка жеребьёвки.
         </p>
 
         {/* Добавление */}

@@ -171,7 +171,10 @@ export const useGameStore = create<GameState>((set, get) => ({
     // Определяем, сколько выбывает
     const totalActive = activeSorted.length;
     let eliminateCount = 0;
-    if (round === 1) {
+    if (totalActive < 8) {
+      // Меньше 8 команд — никто не выбывает
+      eliminateCount = 0;
+    } else if (round === 1) {
       // 10+ команд → выбывает 3, иначе 2
       eliminateCount = totalActive >= 10 ? 3 : 2;
     } else if (round === 2) {

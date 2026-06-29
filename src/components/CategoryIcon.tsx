@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface CategoryIconProps {
   name: string;
   size?: number;
@@ -55,15 +53,20 @@ export function CategoryIcon({ name, size = 48 }: CategoryIconProps) {
     );
   }
 
+  const isFill = size >= 999;
+
   return (
     <img
-      src={`/images/categories/${fileName}.png`}
+      src={`/images/categories/${fileName}.jpg`}
       alt={name}
-      width={size}
-      height={size}
+      width={isFill ? undefined : size}
+      height={isFill ? undefined : size}
       style={{
-        borderRadius: 6,
-        border: '1px solid rgba(201, 168, 76, 0.3)',
+        width: isFill ? '100%' : size,
+        height: isFill ? '100%' : size,
+        borderRadius: isFill ? 0 : 6,
+        objectFit: 'cover',
+        display: 'block',
       }}
     />
   );
